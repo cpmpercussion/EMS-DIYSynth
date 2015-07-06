@@ -113,6 +113,10 @@ yellow discs or blobs and it doesn't matter which way you put them in.
 The tube caps usually have a marked value, while the little ones use a
 code. "104" is a common type, which means 0.1uF.
 
+Capacitors are also useful for filtering signals - removing high or
+low frequencies so that we can focus on a particular part of the
+sound.
+
 ### Potentiometers, LDRs
 
 Potentiometers and LDRs (Light Dependent Resistor) are both resistors
@@ -139,8 +143,8 @@ contains several of these switches, there are six inverters and four
 NAND gates on each.
 
 ICs always need to be powered before they can be used. On both of
-these pin 1 (marked with a dot) is connected to +ve and pin 14
-(diagonally opposite) is connected to -ve.
+these pin 14 is connected to +ve and pin 7 (diagonally opposite) is
+connected to -ve.
 
 ## Project 0 - set up the breadboard
 
@@ -154,35 +158,158 @@ As a first step, lets connect the battery snap to one side of the
 breadboard and then use some jumper wires to connect the power rails
 on both sides togther.
 
+![The breadboard ready for circuits!](images/0-SetupBreadboard_bb.png)
+
 ## Project 1 - making one inverter-oscillator
 
 Let's get started by making one sound. We'll use the 40106
 hex-inverter. Put it in the middle of the breadboard and use a jumper
-to connect pin 1 to the + rail and pin 14 to the - rail.
+to connect pin 14 to the + rail and pin 7 to the - rail. Each
+inverter-section of this chip has one input and one output. If the
+input has a high voltage, the output is low and a low input results in
+a high voltage. Our circuit will connect the output to the input in
+such a way that the voltage on the output continues to oscillate from
+high to low - if we connect this signal to a speaker, we will hear the
+change as sound.
+
+![Diagram of the CD40106 hex-inverter](images/CD40106-ConnectionDiagram.jpg)
 
 Grab a resistor and a capacitor and connect like so:
 
+![Breadboard layout for one oscillator.](images/1-MakingAnOscillator_bb.png)
+
 Now, get some alligator clips and connect them to a speaker, and we
 can probe around to find the sound. Connect the ground to ground and
-the speaker input to the leg of the IC connected to the resistor.
-Loud!
+the speaker input to the leg of the IC connected to the resistor. In
+the diagram, the blue loose connection goes to the tip of the speaker
+plug and the black connection goes to the sleeve. Loud!
 
 This little circuit relies on how long it takes to charge the
 capacitor for the frequency of the sound. Larger valued caps will
 charge more slowly (lower sound), and smaller valued resistors will allow more
 current through, charging them more quickly (higher sound). Try out
-some different capacitors and resistors!
-
+some different capacitors and resistors! 
 
 ## Project 2 - controlling the volume
 
+The output from the oscillator moves from 0-9V - way louder than a
+typical line output. This little circuit will change it to move from
+-0.5 - 0.5V - a much lower output.
+
+![Adding a voltage divider to lower the volume.](images/2-ControllingVolume_bb.png)
+
+You can wire one of the 100K potentiometers as a volume control as
+well if you like. If your amp has a volume control, this probably
+isn't needed right now.
+
+
 ## Project 3 - controlling the pitch
+
+We've got two kinds of variable resistors - LDRs that change in react
+to light, and potentiometers. If you replace the resistor across the
+two pins of the IC with an LDR, you can use a shadow to change the
+pitch.
+
+![The light-dependent resistor will control the pitch. (A potentiometer will also work!)](images/3-ControllingPitch_bb.png)
+
+You can also use a potentiometer for this, you might want to attach
+some jumper wires to alligator clips so you can plug into the
+breadboard with one end and clip to the potentiometer legs with the
+other.
 
 ## Project 4 - mixing synths together
 
+The "hex-inverter" has six not-gates on one chip, so you can have up
+to six oscillators working together. To mix these oscillators, just
+put a 10K resistor between each output and the main output on the
+breadboard. This is a typical design for a simple passive mixer and is
+very useful for lots of applications!
+
+![Using two resistors to mix the outputs of two oscillators.](images/4-MixingTwoOscillators_bb.png)
+
+![Circuit diagram for a passive mixer.](images/mixing-resistors.png)
+
+You can also mix oscillators with diodes and one resistor arranged as
+follows. In this circuit, the audio signals can interact in an
+interesting way, blocking each other. Try mixing some super slow
+oscillators with normal sounding ones. 
+
+![Mixing with diodes - the signals interact and block each other (sounds cool!)](images/mixing-diodes.png)
+
 ## Project 5 - a NAND synth
+
+Now let's try some experiments with the other IC. The CD4093 contains
+four NAND gates - short for the Boolean logical operator "not-and" or in
+english, "neither". You can see how the gates are arranged in the
+connection diagram, each has one output and two inputs. For each gate,
+the output is low only if BOTH inputs are high.
+
+![The connections for the CD4093 - note that the gates on each side are mirror images of each other.](images/CD4093-ConnectionDiagram.jpg)
+
+With this chip, we can make an oscillator that you can turn on and off
+without disconnecting the battery. The output is connected to one
+input as with the hex-inverter synth and the other input is either
+connected to ground (no sound) or the battery +ve rail (sound!).
+
+![Building a basic oscillator with the CD4093 IC. If pin 1 of the IC is connected to +ve voltage, the oscillator will run, if it's connected to ground, it will stop.](images/5-NANDSynth_bb.png)
 
 ## Project 6 - oscillators that control oscillators
 
-## Project 7 - getting it all into a project box
+If we set up two oscillator circuits, we can control one of them with
+the output of the other. In the following circuit, the output of one
+is connected to the first input of the other. If the first oscillator
+is very slow, it will change from high to low in a simple on-off
+rhythm, which cause the other oscillator to play alternating notes and
+rests. If both oscillators are fairly fast, the sounds will interact
+and become complex and interesting!
 
+![Using the output of one NAND oscillator to control the next. Use a big cap and resistor on the first oscillator in the chain to cause a rhythmic effect, if both oscillators are running at audio frequencies, it will have an interesting modulated sound.](images/6-OscillatorsThatControlOscillators_bb.png)
+
+With the CD4093, you can connect up to four oscillators in a chain for
+maximum fun. Or perhaps, you could have two groups of two for stereo
+effects or mixed with resistors or diodes.
+
+## Project 7 - putting together a unique synthesiser
+
+Now you've gotten the hang of a few basic synthesise components: hex
+inverter oscillators, NAND oscillators, mixing, LDRs and
+potentiometers.
+
+Now's the time to put together a unique instrument from these parts.
+For example, you might mix together a few oscillators with the same
+controllers (all pots or all LDRs) but different capacitors - the
+result will be different frequency ranges!
+
+## Project 8 - getting it all into a project box
+
+Once you've got a synthesiser that you would like to work with, it's a
+good idea to get it into some kind of case to keep it together in
+performance. There's lots of options for "professional" enclosures,
+repurposing boxes or cases, or manufacturing new cases with
+laser-cutter, 3D printers and other techniques. It's worth trying out
+a simple prototype in cardboard or with tupperware first just to
+figure out what will work.
+
+Similarly, once you have a circuit you like, it's a good idea to
+solder it onto a prototype board, rather than using up a breadboard.
+
+## Resources for further exploration:
+
+- [Nicolas Collins](http://www.nicolascollins.com)
+  ([http://www.nicolascollins.com]) has a great book called "Handmade
+  Electronic Music: The Art of Hardware Hacking". It's the basis of a
+  lot of this workshop and well worth the price.
+- If you're cheap, the notes that preceded "Hardware Hacking" is
+  available on
+  [Collins' website: www.nicolascollins.com/texts/originalhackingmanual.pdf](http://www.nicolascollins.com/texts/originalhackingmanual.pdf).
+- There's a
+  [series of articles](http://hackaday.com/tag/logic-noise/)
+  on Hackaday about DIY Synths called
+  ["Logic Noise"](http://hackaday.com/tag/logic-noise/).
+- There's a famous DIY synth called the "Atari Punk Console" that uses
+  two 555 timer ICs (or one 556 dual timer). Easy to put together and lots
+  of crazy sounds!
+- Just go search on Youtube for "NAND Synth" or "555 Timer Synth"
+- There's series of Youtube videos called "Colin's Lab" published by
+  Make Magazine and then Adafruit, these feature some general
+  electronics but also a few musical projects.
