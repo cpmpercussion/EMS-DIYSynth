@@ -29,17 +29,40 @@ parts but at the end of the workshop, you'll have a hackable
 synthesiser built into the project box ready for your next
 experimental music session.
 
+## Schedule
+
+- 10am: General Electronics, Making a Sound
+    - Making circuits on a breadboard
+    - A one oscillator synth
+    - Making a volume control
+    - Controlling Pitch
+- 11:15am: Coffee!
+- 11:30am: Making a CD40106 Synthesiser
+    - Controlling Pitch with light sensors
+    - Mixing signals
+- 1pm: Lunch!
+- 2pm: Oscillators that Control Oscillators
+    - Sound with the CD4093
+    - Making rhythms with a Low Frequency Oscillator
+- 3pm: Make a personalised instrument
+    - Combine parts from the day to make a personal instrument
+    - Make a custom prototype enclosure from cardboard and plastic
+      containers.
+- 4:30pm: Mini-Concert
+    - Play a solo or ensemble piece with your new instrument.
+
 ## Parts in your DIY Synth Kit
 
 - breadboard
 - 9V battery
 - 9V battery lead
 - strip of header pins
+- alligator clips
+- jumper leads
 - 40106 - hex inverter IC (one little chip)
 - CD4093 - quad nand gate IC (other little chip)
 - Potentiometers: 10KOhm, 100KOhm, 1MOhm (knobs)
 - Light Dependent Resistors (LDR)
-- Enclosure box
 
 ### Other Parts available to take
 
@@ -47,8 +70,6 @@ experimental music session.
 - bunch of diodes
 - extra LDRs 
 - extra potentiometers
-- jumper leads
-- alligator clips
 - breadboard wire (thin solid core wire for making breadboard
   connections)
 
@@ -146,6 +167,14 @@ ICs always need to be powered before they can be used. On both of
 these pin 14 is connected to +ve and pin 7 (diagonally opposite) is
 connected to -ve.
 
+<!--
+### Making a basic circuit
+
+![My First Circuit - lighting an LED. This circuit has a battery (lines on the left), resistor (zig zag), LED (line and triangle).](images/circuit-example_schem.png)
+
+![My First Circuit - the breadboard version.](images/circuit-example_bb.png)
+-->
+
 ## Project 0 - set up the breadboard
 
 The breadboard has lots of little holes to plug in components. They're
@@ -176,7 +205,7 @@ change as sound.
 
 Grab a resistor and a capacitor and connect like so:
 
-![Breadboard layout for one oscillator.](images/1-MakingAnOscillator_bb.png)
+![Breadboard layout for one oscillator. The blue wire connects to the signal part of the amp and the black wire connects to the ground.](images/1-MakingAnOscillator_bb.png)
 
 Now, get some alligator clips and connect them to a speaker, and we
 can probe around to find the sound. Connect the ground to ground and
@@ -188,20 +217,26 @@ This little circuit relies on how long it takes to charge the
 capacitor for the frequency of the sound. Larger valued caps will
 charge more slowly (lower sound), and smaller valued resistors will allow more
 current through, charging them more quickly (higher sound). Try out
-some different capacitors and resistors! 
+some different capacitors and resistors!
+
+![A circuit diagram of one oscillator showing just one section of the CD40106, a capacitor, and a resistor. The arrow made of lines means "earth", which in this case is the negative side of the battery.](images/inverter-oscillator.png)
 
 ## Project 2 - controlling the volume
 
 The output from the oscillator moves from 0-9V - way louder than a
 typical line output. This little circuit will change it to move from
--0.5 - 0.5V - a much lower output.
+-0.5 - 0.5V - a much lower output. You can wire one of the 100K
+potentiometers as a volume control as well if you like. If your amp
+has a volume control, this probably isn't needed right now.
 
-![Adding a voltage divider to lower the volume.](images/2-ControllingVolume_bb.png)
+![Adding a voltage divider and a coupling capacitor to lower the volume. Again, blue wire to signal, black wire to ground on the amp. You could also add a 100K potentiometer after the blue wire to make a volume control.](images/2-ControllingVolume_bb.png)
 
-You can wire one of the 100K potentiometers as a volume control as
-well if you like. If your amp has a volume control, this probably
-isn't needed right now.
-
+The example has two parts. First, the signal is sent through a 10uF
+electrolytic capacitor. This changes the signal from being 0V to 9V to
+-4.5V to 4.5V. That is, the changing signal moves around 0 instead of
++4.5V. The second part is two resistors organised as a "voltage
+divider". This reduces the voltage to go between 0.5V and -0.5V which
+is a bit quieter than full-volume line level (i.e. still pretty loud).
 
 ## Project 3 - controlling the pitch
 
@@ -210,12 +245,14 @@ to light, and potentiometers. If you replace the resistor across the
 two pins of the IC with an LDR, you can use a shadow to change the
 pitch.
 
-![The light-dependent resistor will control the pitch. (A potentiometer will also work!)](images/3-ControllingPitch_bb.png)
-
 You can also use a potentiometer for this, you might want to attach
 some jumper wires to alligator clips so you can plug into the
 breadboard with one end and clip to the potentiometer legs with the
 other.
+
+![The light-dependent resistor will control the pitch. (A potentiometer will also work!) In this diagram, I've put in a headphone-style jack, but again, blue wire to signal, black wire to jack.](images/3-ControllingPitch_bb.png)
+
+
 
 ## Project 4 - mixing synths together
 
@@ -227,14 +264,14 @@ very useful for lots of applications!
 
 ![Using two resistors to mix the outputs of two oscillators.](images/4-MixingTwoOscillators_bb.png)
 
-![Circuit diagram for a passive mixer.](images/mixing-resistors.png)
+![Circuit diagram for a passive mixer. Using 10kOhm resistors would be a good choice, many kinds will work, but if the values are different, the voices will be different volumes.](images/mixing-resistors.png)
 
 You can also mix oscillators with diodes and one resistor arranged as
 follows. In this circuit, the audio signals can interact in an
 interesting way, blocking each other. Try mixing some super slow
 oscillators with normal sounding ones. 
 
-![Mixing with diodes - the signals interact and block each other (sounds cool!)](images/mixing-diodes.png)
+![Mixing with diodes - the signals interact and block each other (sounds cool!) Use a 10kOhm resistor between the output point and ground. Diodes are one-way devices, the little black stripe on the diode should point towards the output (the direction of the arrow in the diagram).](images/mixing-diodes.png)
 
 ## Project 5 - a NAND synth
 
@@ -252,6 +289,8 @@ input as with the hex-inverter synth and the other input is either
 connected to ground (no sound) or the battery +ve rail (sound!).
 
 ![Building a basic oscillator with the CD4093 IC. If pin 1 of the IC is connected to +ve voltage, the oscillator will run, if it's connected to ground, it will stop.](images/5-NANDSynth_bb.png)
+
+![Circuit diagram of a NAND oscillator - this shows just one section of the CD4093 IC with a capacitor and resistor. The first input of the NAND gate can be used to turn the oscillation on and off.](images/nand-oscillator.png)
 
 ## Project 6 - oscillators that control oscillators
 
@@ -299,17 +338,66 @@ solder it onto a prototype board, rather than using up a breadboard.
   ([http://www.nicolascollins.com]) has a great book called "Handmade
   Electronic Music: The Art of Hardware Hacking". It's the basis of a
   lot of this workshop and well worth the price.
-- If you're cheap, the notes that preceded "Hardware Hacking" is
+- If you're cheap, the class notes that preceded "Hardware Hacking" is
   available on
-  [Collins' website: www.nicolascollins.com/texts/originalhackingmanual.pdf](http://www.nicolascollins.com/texts/originalhackingmanual.pdf).
+  [Collins' website.](http://www.nicolascollins.com/texts/originalhackingmanual.pdf).
+  Check these out for the basics, and for the helpful lists of
+  required parts.
 - There's a
   [series of articles](http://hackaday.com/tag/logic-noise/)
   on Hackaday about DIY Synths called
   ["Logic Noise"](http://hackaday.com/tag/logic-noise/).
-- There's a famous DIY synth called the "Atari Punk Console" that uses
-  two 555 timer ICs (or one 556 dual timer). Easy to put together and lots
-  of crazy sounds!
-- Just go search on Youtube for "NAND Synth" or "555 Timer Synth"
-- There's series of Youtube videos called "Colin's Lab" published by
-  Make Magazine and then Adafruit, these feature some general
-  electronics but also a few musical projects.
+- There's a famous DIY synth called the
+  ["Atari Punk Console"](https://en.wikipedia.org/wiki/Atari_Punk_Console)
+  that uses two
+  [555 timer ICs](https://en.wikipedia.org/wiki/555_timer_IC) (or one
+  556 dual timer). Easy to put together and lots of crazy sounds!
+- Just go search on Youtube for
+  ["NAND Synth"](https://www.youtube.com/results?search_query=NAND+Synth)
+  or
+  ["555 Timer Synth"](https://www.youtube.com/results?search_query=555+Timer+Synth)
+- There's series of Youtube videos called "Collin's Lab" made by
+  Collin Cunningham and published by
+  [Make Magazine](https://www.youtube.com/playlist?list=PLDE23FAC8A681FA46)
+  and then
+  [Adafruit](https://learn.adafruit.com/category/collins-lab), these
+  feature some general electronics but also a few musical projects.
+- If you're hungry for more electronics videos try ["The Ben Heck Show"](https://www.youtube.com/user/thebenheckshow)
+  or ["EEVBlog"](https://www.youtube.com/user/eevblog), both on
+  Youtube.
+  
+
+## Buying more parts for MORE synthesisers:
+
+- [Jaycar](http://www.jaycar.com.au) is the only big store left,
+  there's one in Fyshwick and Belconnen. They have a decent range, but
+  some things are weirdly expensive and all ICs are held behind the
+  desk which is tedious to ask for.
+- [Core Electronics](http://core-electronics.com.au) is a decent
+  Australian online store for parts (based in Newcastle). Good
+  multi-packs of capacitors and resistors. They resell Sparkfun boards
+  and parts as well as knockoff Arduinos etc from China but are more
+  convenient than ordering from the USA or Ebay.
+- [Element 14](http://element14.com) is a huge online electronics
+  store. The search mechanism is daunting and you have to use a filter
+  dialogue to find what you want. If you order about $50, the shipping
+  is free, many things show up overnight if it's in stock in
+  Australia, otherwise it takes about a week.
+- [Ebay](http://ebay.com.au) is a great source for super-cheap parts
+  from China. The shipping is slow and quality can be a bit dodgy, but
+  there's bargains to be had.
+
+## Academic Resources
+
+Doing a 3rd Year/Honours/Masters project using electronic music?
+There's lot of great work out there to check out and cite, and lots of
+opportunitites to publish as well.
+
+- [NIME (New Interfaces for Musical Expression)](http://nime.org) is a
+  great modern conference covering all kinds of sound/music hacking. The
+  proceedings are available online for free and it's in Brisbane next
+  year. You should definitely show up.
+- [Computer Music Journal](http://www.computermusicjournal.org)
+- [Organised Sound](http://journals.cambridge.org/action/displayJournal?jid=OSO)
+- [Leonardo Music Journal](http://www.mitpressjournals.org/loi/lmj)
+
