@@ -264,7 +264,7 @@ very useful for lots of applications!
 
 ![Using two resistors to mix the outputs of two oscillators.](images/4-MixingTwoOscillators_bb.png)
 
-![Circuit diagram for a passive mixer. Using 10kOhm resistors would be a good choice, many kinds will work, but if the values are different, the voices will be different volumes.](images/mixing-resistors.png)
+![Circuit diagram for a passive mixer. Using all 10kOhm resistors would be a good choice, many kinds will work, but they all need to be the same value. If the values are different, then the inputs will have different volumes.](images/mixing-resistors.png)
 
 You can also mix oscillators with diodes and one resistor arranged as
 follows. In this circuit, the audio signals can interact in an
